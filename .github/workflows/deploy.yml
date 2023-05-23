@@ -1,5 +1,8 @@
 name: Deploy
-on: workflow_dispatch
+on:
+  push:
+    branches: develop
+  workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
@@ -10,7 +13,24 @@ env:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
+    if: github.ref_name != 'develop'
     concurrency: deploy # feature/${{github.ref_name}}
+    environment: feature/${{github.ref_name}}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Install Terragrunt
+        uses: autero1/action-terragrunt@v1.3.2
+        with:
+          terragrunt_version: latest
+          token: ${{secrets.GITHUB_TOKEN}}
+      - run: npm run apply
+  Deploy-Staging:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'develop'
+    concurrency: staging # feature/${{github.ref_name}}
     environment: feature/${{github.ref_name}}
     steps:
       - name: Check out repository code
