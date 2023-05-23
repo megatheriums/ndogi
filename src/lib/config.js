@@ -1,10 +1,12 @@
+require('dotenv/config');
+
 const config = {
   database: {
-    host: 'bitly-ndogi-local-debugging.ckenlu0esogf.eu-central-1.rds.amazonaws.com',
-    name: 'ndogi',
-    password: '12345678',
-    port: 3306,
-    username: 'foo',
+    host: process.env.DATABASE_HOST,
+    name: process.env.DATABASE_NAME,
+    password: process.env.DATABASE_PASSWORD,
+    port: process.env.DATABASE_PORT,
+    username: process.env.DATABASE_USERNAME,
   },
 };
 

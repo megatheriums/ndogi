@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const query = require('./lib/query');
 const setup = require('./lib/setup');
@@ -9,9 +10,7 @@ app.use(express.urlencoded({
   extended: false,
 }));
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+app.use('/', express.static(path.join(__dirname, '..', 'data', 'public')));
 
 app.get('/create-link', async (req, res) => {
   const {
@@ -52,8 +51,8 @@ app.get('/delete-link', async (req, res) => {
 });
 
 app.get('/*', async (req, res) => {
-  const path = req.path.replace(/^\//, '');
-  const results = await query('SELECT target FROM links WHERE short = ? LIMIT 1', [path]);
+  const requestPath = req.path.replace(/^\//, '');
+  const results = await query('SELECT target FROM links WHERE short = ? LIMIT 1', [requestPath]);
   console.log(results);
   if (results.length === 1) {
     console.log(`Redirecting to: ${results[0].target}`);
@@ -61,7 +60,7 @@ app.get('/*', async (req, res) => {
     res.status(301).send();
     return;
   }
-  console.debug(`Couldn't find link for "${path}"`);
+  console.debug(`Couldn't find link for "${requestPath}"`);
   res.status(404).send();
 });
 

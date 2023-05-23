@@ -5,8 +5,8 @@ resource "aws_db_instance" "main" {
   engine_version    = "5.7"
   identifier        = "${var.namespace}-${var.project_name}-${var.environment}"
   instance_class    = "db.t3.micro"
-  username          = "foo"      # TODO Use KMS
-  password          = "12345678" # TODO Use KMS
+  username          = local.database_username # TODO Use KMS
+  password          = local.database_password # TODO Use KMS
   storage_encrypted = !var.enable_debugging
 
   # Stability

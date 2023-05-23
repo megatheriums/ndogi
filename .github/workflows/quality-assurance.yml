@@ -6,7 +6,7 @@ env:
   CI_GITHUB: 1
   TF_VAR_aws_account_id: ${{vars.TF_VAR_AWS_ACCOUNT_ID}}
   TF_VAR_enable_debugging: true
-  TF_VAR_environment: github-${{github.ref_name}}
+  TF_VAR_environment: ghtest-${{github.sha}}
 jobs:
   Setup:
     runs-on: ubuntu-latest
@@ -80,6 +80,8 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     needs: Plan
+    continue-on-error: true
+    concurrency: quality-assurance # feature-test/${{github.sha}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -94,6 +96,7 @@ jobs:
   Undeploy:
     runs-on: ubuntu-latest
     needs: Deploy
+    concurrency: quality-assurance # feature-test/${{github.sha}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
