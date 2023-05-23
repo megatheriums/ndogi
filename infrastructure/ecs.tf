@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "main"
+  name = "${var.namespace}-${var.project_name}-${var.environment}"
 }
 
 resource "aws_ecs_service" "main" {
