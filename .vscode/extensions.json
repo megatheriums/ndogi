@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "christian-kohler.npm-intellisense",
+        "davidanson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "github.vscode-github-actions",
+        "hashicorp.terraform",
+        "sonarsource.sonarlint-vscode",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "visualstudioexptteam.vscodeintellicode"
+    ]
+}

@@ -1,0 +1,23 @@
+# General
+.env
+*.log
+
+# Node.JS
+build
+dist
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Terraform
+.terraform
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+*.tfstate
+.tfvars
+infrastructure/**/backend.tf
+terraform.tfstate.backup
+
+# Others
+docs/*.pdf

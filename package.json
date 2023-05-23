@@ -1,0 +1,41 @@
+{
+  "name": "ndogi",
+  "version": "1.0.0",
+  "description": "URL shortener for mid-sized SaaS company",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "apply": "./ci/apply.sh",
+    "destroy": "./ci/destroy.sh",
+    "fix": "./ci/fix.sh",
+    "fix:node:audit": "./ci/fix.sh node-audit",
+    "fix:node:lint": "./ci/fix.sh node-lint",
+    "fix:terraform:lint": "./ci/fix.sh terraform-lint",
+    "plan": "./ci/plan.sh",
+    "publish": "./ci/publish.sh",
+    "setup": "npm ci",
+    "setup:production": "npm ci --production",
+    "start": "node src/index.js",
+    "test": "./ci/test.sh",
+    "test:node:audit": "./ci/test.sh node-audit",
+    "test:node:lint": "./ci/test.sh node-lint",
+    "test:terraform:format": "./ci/test.sh terraform-lint"
+  },
+  "author": {
+    "email": "martin.bories@megatherium.eu",
+    "name": "Martin Bories",
+    "url": "https://megatherium.eu"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}
