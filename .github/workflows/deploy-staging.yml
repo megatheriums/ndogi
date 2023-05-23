@@ -1,0 +1,27 @@
+name: Deploy
+on:
+  push:
+    branches: develop
+env:
+  AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  CI_GITHUB: 1
+  TF_VAR_aws_account_id: ${{vars.TF_VAR_AWS_ACCOUNT_ID}}
+  TF_VAR_enable_debugging: true
+  TF_VAR_environment: gh-${{github.ref_name}}
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    concurrency: deploy # feature/${{github.ref_name}}
+    environment: feature/${{github.ref_name}}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Install Terragrunt
+        uses: autero1/action-terragrunt@v1.3.2
+        with:
+          terragrunt_version: latest
+          token: ${{secrets.GITHUB_TOKEN}}
+      - run: npm run apply
