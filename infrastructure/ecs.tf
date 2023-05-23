@@ -23,6 +23,28 @@ resource "aws_ecs_task_definition" "main" {
       image     = aws_ecr_repository.main.repository_url
       essential = true
       cpu       = 1024
+      environment = [
+        {
+          name  = "DATABASE_HOST"
+          value = aws_db_instance.main.address
+        },
+        {
+          name  = "DATABASE_NAME",
+          value = aws_db_instance.main.name
+        },
+        {
+          name  = "DATABASE_PASSWORD"
+          value = local.database_password
+        },
+        {
+          name  = "DATABASE_PORT"
+          value = aws_db_instance.main.port
+        },
+        {
+          name  = "DATABASE_USERNAME"
+          value = local.database_username
+        }
+      ]
       portMappings = [
         {
           containerPort = 3000

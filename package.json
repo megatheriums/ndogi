@@ -17,7 +17,7 @@
     "publish": "./ci/publish.sh",
     "setup": "./ci/setup.sh",
     "setup:production": "./ci/setup.sh production",
-    "start": "node src/index.js",
+    "start": "cross-env node src/index.js",
     "test": "./ci/test.sh",
     "test:node:audit": "./ci/test.sh node-audit",
     "test:node:lint": "./ci/test.sh node-lint",
@@ -30,6 +30,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mysql2": "^3.3.1"
   },
