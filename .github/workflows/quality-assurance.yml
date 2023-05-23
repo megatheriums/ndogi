@@ -1,4 +1,4 @@
-name: Terraform
+name: Quality Assurance
 on: [push]
 jobs:
   Setup:
@@ -23,10 +23,9 @@ jobs:
       - name: Install Node.JS
         uses: actions/setup-node@v3
       - name: Download dependencies
-        uses: actions/upload-artifact@v3
+        uses: actions/download-artifact@v3
         with:
           name: node_modules
-          path: node_modules
       - run: npm run test:node:audit
   Test-Node-Linting:
     runs-on: ubuntu-latest
@@ -37,8 +36,7 @@ jobs:
       - name: Install Node.JS
         uses: actions/setup-node@v3
       - name: Download dependencies
-        uses: actions/upload-artifact@v3
+        uses: actions/download-artifact@v3
         with:
           name: node_modules
-          path: node_modules
       - run: npm run test:node:lint
