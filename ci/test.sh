@@ -21,5 +21,5 @@ fi
 
 # Node.JS Format
 if [ "$objective" = "all" ] || [ "$objective" = "node-lint" ]; then
-	eslint src || (echo "Failed Node.JS Linting" && exit 1)
+	./node_modules/.bin/eslint src || (echo "Failed Node.JS Linting" && exit 1)
 fi

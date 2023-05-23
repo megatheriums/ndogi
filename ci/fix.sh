@@ -19,5 +19,5 @@ fi
 
 # Node.JS Format
 if [ "$objective" = "all" ] || [ "$objective" = "node-lint" ]; then
-	eslint src --fix
+	./node_modules/.bin/eslint src --fix
 fi
