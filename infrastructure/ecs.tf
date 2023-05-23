@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "main" {
         },
         {
           name  = "DATABASE_NAME",
-          value = aws_db_instance.main.name
+          value = aws_db_instance.main.db_name
         },
         {
           name  = "DATABASE_PASSWORD"
@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "main" {
         },
         {
           name  = "DATABASE_PORT"
-          value = aws_db_instance.main.port
+          value = tostring(aws_db_instance.main.port)
         },
         {
           name  = "DATABASE_USERNAME"
