@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -f /usr/local/aws-cli/v2/current/bin/aws ]; then
+if [ ! -f /usr/local/aws-cli/v2/current/bin/aws ] && [ "$CI_GITHUB" != "1" ]; then
 	# TODO Update AWS CLI
 	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 	unzip -oq awscliv2.zip
