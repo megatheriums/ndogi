@@ -23,6 +23,39 @@ URL shortener for mid-sized SaaS company.
 - [Terragrunt](https://terragrunt.gruntwork.io/docs/getting-started/install/)
 - [Node.JS and NPM](https://nodejs.org/en/download)
 
+### Deploying and destroying
+
+To install all dependencies, run:
+
+```#bash
+npm run setup
+```
+
+Afterwards, create a [infrastructure/.env](infrastructure/.env) file as explained in [configuration](#configuration).
+
+To deploy a new environment, run:
+
+```#bash
+npm run apply
+```
+
+To destroy your environment, run:
+
+```#bash
+npm run destroy
+```
+
+## Configuration
+
+| Name | Type | Description |
+| --- | --- | --- |
+| AWS_ACCESS_KEY_ID | String | The Access Key for the AWS account. |
+| AWS_SECRET_ACCESS_KEY | String | The secret access key for the AWS account. |
+| TF_VAR_aws_account_id | Integer | The ID of the AWS account to deploy to. |
+| TF_VAR_environment | String | The name of the environment that will be deployed. Must be unique to prevent impacting other environments or developers. For local development, choose `local-myname`. |
+| TF_VAR_enable_debugging | Boolean | Whether to enable debugging in the deployed resources or not. |
+
+
 ## Optimizations
 
 ### Engineering perspective
