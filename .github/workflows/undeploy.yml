@@ -1,6 +1,5 @@
 name: Undeploy
 on:
-  push:
   workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
