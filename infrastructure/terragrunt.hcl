@@ -7,7 +7,7 @@ remote_state {
   config = {
     bucket = "${get_env("TF_VAR_aws_account_id")}-${get_env("TF_VAR_namespace", "bitly")}-terraform-state"
     encrypt = true
-    key = get_env("TF_VAR_project_path", "bitly/ndogi")
+    key = "${get_env("TF_VAR_project_path", "bitly/ndogi")}/${get_env("TF_VAR_environment")}"
     region = get_env("TF_VAR_aws_region", "eu-central-1")
   }
 }
