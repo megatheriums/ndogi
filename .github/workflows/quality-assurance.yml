@@ -9,10 +9,10 @@ jobs:
       - name: Install Node.JS
         uses: actions/setup-node@v3
       - run: npm run setup
-      - name: Upload dependencies
-        uses: actions/upload-artifact@v3
+      - name: Cache dependencies
+        uses: actions/cache/save@v3
         with:
-          name: node_modules
+          key: node_modules
           path: node_modules
   Test-Node-Dependencies:
     runs-on: ubuntu-latest
@@ -23,9 +23,9 @@ jobs:
       - name: Install Node.JS
         uses: actions/setup-node@v3
       - name: Download dependencies
-        uses: actions/download-artifact@v3
+        uses: actions/cache/restore@v3
         with:
-          name: node_modules
+          key: node_modules
           path: node_modules
       - run: npm run test:node:audit
   Test-Node-Linting:
@@ -37,8 +37,8 @@ jobs:
       - name: Install Node.JS
         uses: actions/setup-node@v3
       - name: Download dependencies
-        uses: actions/download-artifact@v3
+        uses: actions/cache/restore@v3
         with:
-          name: node_modules
+          key: node_modules
           path: node_modules
       - run: npm run test:node:lint
