@@ -80,6 +80,8 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     needs: Plan
+    concurrency: ${{vars.TF_VAR_environment}}
+    environment: ${{vars.TF_VAR_environment}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -94,6 +96,8 @@ jobs:
   Undeploy:
     runs-on: ubuntu-latest
     needs: Deploy
+    concurrency: ${{vars.TF_VAR_environment}}
+    environment: ${{vars.TF_VAR_environment}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
