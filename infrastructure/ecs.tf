@@ -3,7 +3,7 @@ resource "aws_ecs_task_definition" "main" {
     null_resource.image
   ]
 
-  family = substr("${var.namespace}-${var.project_name}-${var.environment}-main", 0, 32)
+  family = substr("${var.namespace}-${var.project_name}-main-${var.environment}", 0, 32)
   cpu    = 1024
   memory = 2048
   requires_compatibilities = [
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "main" {
 }
 
 resource "aws_iam_role" "ecs_main" {
-  name = "${var.namespace}-${var.project_name}-${var.environment}_ecs-main"
+  name = substr("${var.namespace}-${var.project_name}-ecs-main-${var.environment}", 0, 64)
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -76,7 +76,7 @@ resource "aws_iam_role" "ecs_main" {
 }
 
 resource "aws_iam_role_policy" "ecs_main" {
-  name = "${var.namespace}-${var.project_name}-${var.environment}_ecs-main"
+  name = "${var.namespace}-${var.project_name}-ecs-main-${var.environment}"
   role = aws_iam_role.ecs_main.id
 
   policy = jsonencode({

@@ -63,6 +63,7 @@ npm run destroy
 #### Stability
 
 - Deploy updates in separate environment with monitoring, redirect increasing amount of traffic to the new version (start low, end with 100 %)
+  - Reuse VPC across feature-environments
 - Separate production-, staging- and feature- environment by using different AWS accounts
 - Deploy to multiple [Availability Zones](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones)
 - RDS Replica in different Availability Zones
