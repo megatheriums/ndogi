@@ -52,4 +52,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
       - name: Install Terragrunt
         uses: autero1/action-terragrunt@v1.3.2
+        with:
+          terragrunt_version: latest
       - run: npm run test:terraform:lint
