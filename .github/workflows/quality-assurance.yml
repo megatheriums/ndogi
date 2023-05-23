@@ -4,7 +4,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY_ID}}
   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
   TF_VAR_aws_account_id: ${{vars.TF_VAR_AWS_ACCOUNT_ID}}
-  TF_VAR_environment: github-${{vars.GITHUB_REF_NAME}}
+  TF_VAR_environment: github-${{github.ref_name}}
 jobs:
   Setup:
     runs-on: ubuntu-latest
