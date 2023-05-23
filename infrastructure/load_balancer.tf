@@ -1,5 +1,5 @@
 resource "aws_lb" "main" {
-  name               = "${var.namespace}-${var.project_name}-${var.environment}"
+  name               = substr("${var.namespace}-${var.project_name}-${var.environment}", 0, 32)
   internal           = false
   load_balancer_type = "application"
   security_groups = [
@@ -20,7 +20,7 @@ resource "aws_lb_listener" "main" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name        = "${var.namespace}-${var.project_name}-${var.environment}"
+  name        = substr("${var.namespace}-${var.project_name}-${var.environment}", 0, 32)
   target_type = "ip"
   port        = 80
   protocol    = "HTTP"

@@ -3,7 +3,7 @@ resource "aws_ecs_task_definition" "main" {
     null_resource.image
   ]
 
-  family = "${var.namespace}-${var.project_name}-${var.environment}-main"
+  family = substr("${var.namespace}-${var.project_name}-${var.environment}-main", 0, 32)
   cpu    = 1024
   memory = 2048
   requires_compatibilities = [
