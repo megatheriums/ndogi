@@ -10,7 +10,7 @@ env:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
-    concurrency: feature/${{github.ref_name}}
+    concurrency: single # feature/${{github.ref_name}}
     environment: feature/${{github.ref_name}}
     steps:
       - name: Check out repository code

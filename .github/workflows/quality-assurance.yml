@@ -80,7 +80,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     needs: Plan
-    concurrency: feature-test/${{github.sha}}
+    concurrency: single # feature-test/${{github.sha}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -95,7 +95,7 @@ jobs:
   Undeploy:
     runs-on: ubuntu-latest
     needs: Deploy
-    concurrency: feature-test/${{github.sha}}
+    concurrency: single # feature-test/${{github.sha}}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
