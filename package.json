@@ -21,7 +21,7 @@
     "test": "./ci/test.sh",
     "test:node:audit": "./ci/test.sh node-audit",
     "test:node:lint": "./ci/test.sh node-lint",
-    "test:terraform:format": "./ci/test.sh terraform-lint"
+    "test:terraform:lint": "./ci/test.sh terraform-lint"
   },
   "author": {
     "email": "martin.bories@megatherium.eu",
