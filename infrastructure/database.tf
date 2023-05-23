@@ -21,8 +21,8 @@ resource "aws_db_instance" "main" {
   }
 
   # Debugging
-  publicly_accessible          = var.enable_debugging
+  publicly_accessible = var.enable_debugging
   # monitoring_interval          = var.enable_debugging ? 1 : 0
   # performance_insights_enabled = var.enable_debugging
-  skip_final_snapshot          = var.enable_debugging
+  skip_final_snapshot = var.enable_debugging
 }

@@ -45,8 +45,8 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
-    container_name = "main"
-    container_port = 3000
+    container_name   = "main"
+    container_port   = 3000
   }
 
   network_configuration {
