@@ -40,11 +40,11 @@ resource "aws_ecs_service" "main" {
   name            = "main"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
 
   load_balancer {
-    elb_name       = aws_lb.main.name
+    target_group_arn = aws_lb_target_group.main.arn
     container_name = "main"
     container_port = 3000
   }
