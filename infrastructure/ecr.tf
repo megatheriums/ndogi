@@ -17,6 +17,18 @@ resource "null_resource" "install_aws_cli" {
   }
 }
 
+data "archive_file" "source_code" {
+  source_dir  = "${path.module}/../src"
+  output_path = "${path.module}/../src.zip"
+  type        = "zip"
+}
+
+data "archive_file" "ci_scripts" {
+  source_dir  = "${path.module}/../ci"
+  output_path = "${path.module}/../ci.zip"
+  type        = "zip"
+}
+
 resource "null_resource" "image" {
   depends_on = [
     aws_ecr_repository.main,
@@ -24,7 +36,11 @@ resource "null_resource" "image" {
   ]
 
   triggers = {
-    # always_run = timestamp()
+    ci_scripts      = archive_file.ci_scripts.output_sha
+    Dockerfile      = filesha1("${path.module}/../Dockerfile")
+    PackageLockJson = filesha1("${path.module}/../package-lock.json")
+    PackageJson     = filesha1("${path.module}/../package.json")
+    source_code     = archive_file.source_code.output_sha
   }
 
   provisioner "local-exec" {
