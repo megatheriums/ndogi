@@ -27,6 +27,9 @@ jobs:
           terragrunt_version: latest
           token: ${{secrets.GITHUB_TOKEN}}
       - run: npm run apply
+      - run: echo NDOGI_URL=$(terraform-bin output url) >> $GITHUB_ENV
+      - run: echo "url=$NDOGI_URL"
+      - run: npm run test:node:e2e
   Deploy-Staging:
     runs-on: ubuntu-latest
     if: github.ref_name == 'develop'
@@ -43,3 +46,6 @@ jobs:
           terragrunt_version: latest
           token: ${{secrets.GITHUB_TOKEN}}
       - run: npm run apply
+      - run: echo NDOGI_URL=$(terraform-bin output url) >> $GITHUB_ENV
+      - run: echo "url=$NDOGI_URL"
+      - run: npm run test:node:e2e
