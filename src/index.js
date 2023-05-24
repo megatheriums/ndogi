@@ -5,7 +5,6 @@ import url from 'url';
 import query from './lib/query.js';
 import setup from './lib/setup.js';
 
-// eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const app = express();

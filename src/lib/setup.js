@@ -5,7 +5,6 @@ import url from 'url';
 
 import query from './query.js';
 
-// eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const setup = async () => {
@@ -29,6 +28,7 @@ const setup = async () => {
     console.debug('Table "options" not found. Running initial setup...');
   }
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const nextVersion = currentVersion + 1;
 
