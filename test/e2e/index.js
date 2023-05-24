@@ -6,12 +6,12 @@ import {
 import fetch from 'node-fetch';
 
 const config = {
-  url: process.env.NDOGI_URL || 'http://localhost:3000',
+  url: process.env.NDOGI_URL || 'localhost:3000',
 };
 
 describe('Main page', () => {
   test('Contains "Hello, World!"', async () => {
-    const response = await fetch(`${config.url}`);
+    const response = await fetch(`http://${config.url}`);
     expect(response.status).toBe(200);
     const data = await response.text();
     expect(data.toString('utf-8')).toContain('Hello, World!');
