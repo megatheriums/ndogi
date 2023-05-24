@@ -1,22 +1,28 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import url from 'url';
 
-const query = require('./lib/query');
-const setup = require('./lib/setup');
+import query from './lib/query.js';
+import setup from './lib/setup.js';
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const app = express();
 
 app.use(express.urlencoded({
   extended: false,
 }));
+app.use(express.json({
+  extended: false,
+}));
 
 app.use('/', express.static(path.join(__dirname, '..', 'data', 'public')));
 
-app.get('/create-link', async (req, res) => {
+app.post('/link', async (req, res) => {
   const {
     short,
     target,
-  } = req.query;
+  } = req.body;
 
   if (!short || !target) {
     res.status(400).send('Invalid parameter values for "short" and/or "target".');
@@ -32,10 +38,10 @@ app.get('/create-link', async (req, res) => {
     short,
     target,
   ]);
-  res.send();
+  res.send(`Created short: <a href="/${short}" target="_blank">/${short}</a>`);
 });
 
-app.get('/delete-link', async (req, res) => {
+const deleteShort = async (req, res) => {
   const {
     short,
   } = req.query;
@@ -47,18 +53,24 @@ app.get('/delete-link', async (req, res) => {
   await query('DELETE FROM links WHERE short = ? LIMIT 1', [
     short,
   ]);
-  res.send();
-});
+  res.send(`Successfully deleted link for "${short}".`);
+};
+app.delete('/link', deleteShort);
+app.get('/link-delete', deleteShort);
 
 app.get('/*', async (req, res) => {
   const requestPath = req.path.replace(/^\//, '');
   const results = await query('SELECT target FROM links WHERE short = ? LIMIT 1', [requestPath]);
-  console.log(results);
   if (results.length === 1) {
-    console.log(`Redirecting to: ${results[0].target}`);
-    res.setHeader('Location', results[0].target);
-    res.status(301).send();
-    return;
+    let {
+      target,
+    } = results[0];
+
+    if (target.substr(0, 4) !== 'http') {
+      target = `https://${target}`;
+    }
+    console.log(`Redirecting to: ${target}`);
+    res.redirect(301, target);
   }
   console.debug(`Couldn't find link for "${requestPath}"`);
   res.status(404).send();
@@ -68,6 +80,6 @@ app.get('/*', async (req, res) => {
   await setup();
 
   app.listen(3000, () => {
-    console.log('Server started.');
+    console.log('Server started on port 3000.');
   });
 })();

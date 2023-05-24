@@ -1,5 +1,31 @@
 <html>
     <body>
         <h1>Hello, World!</h1>
+        <fieldset>
+            <legend>Shorten your URL!</legend>
+
+            <form
+                action="link"
+                enctype="application/json"
+                method="post"
+            >
+                <input type="text" placeholder="Short form" name="short" />
+                <input type="text" placeholder="Target URL" name="target" />
+                <input type="submit" value="Shorten!" />
+            </form>
+        </fieldset>
+
+        <fieldset>
+            <legend>Delete a short</legend>
+
+            <form
+                action="link-delete"
+                enctype="application/x-www-form-urlencoded"
+                method="get"
+            >
+                <input type="text" placeholder="Short form" name="short" />
+                <input type="submit" value="Delete" />
+            </form>
+        </fieldset>
     </body>
 </html>

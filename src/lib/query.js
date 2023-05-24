@@ -1,6 +1,6 @@
-const mysql = require('mysql2/promise');
+import mysql from 'mysql2/promise';
 
-const config = require('./config');
+import config from './config.js';
 
 let connection;
 
@@ -21,4 +21,4 @@ const query = async (databaseQuery, parameters) => {
   return rows;
 };
 
-module.exports = query;
+export default query;

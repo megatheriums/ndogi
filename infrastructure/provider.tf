@@ -1,5 +1,9 @@
 terraform {
   required_providers {
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.3.0"
+    }
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.0"
@@ -10,6 +14,8 @@ terraform {
     }
   }
 }
+
+provider "archive" {}
 
 provider "aws" {
   region = "eu-central-1"

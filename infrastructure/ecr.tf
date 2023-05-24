@@ -24,7 +24,7 @@ resource "null_resource" "image" {
   ]
 
   triggers = {
-    # always_run = timestamp()
+    docker_image_trigger = local.docker_image_trigger
   }
 
   provisioner "local-exec" {
