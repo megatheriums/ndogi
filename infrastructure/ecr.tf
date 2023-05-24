@@ -36,11 +36,11 @@ resource "null_resource" "image" {
   ]
 
   triggers = {
-    ci_scripts      = archive_file.ci_scripts.output_sha
+    ci_scripts      = data.archive_file.ci_scripts.output_sha
     Dockerfile      = filesha1("${path.module}/../Dockerfile")
     PackageLockJson = filesha1("${path.module}/../package-lock.json")
     PackageJson     = filesha1("${path.module}/../package.json")
-    source_code     = archive_file.source_code.output_sha
+    source_code     = data.archive_file.source_code.output_sha
   }
 
   provisioner "local-exec" {
