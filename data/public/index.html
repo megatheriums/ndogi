@@ -5,9 +5,9 @@
             <legend>Shorten your URL!</legend>
 
             <form
-                action="create-link"
-                enctype="application/x-www-form-urlencoded"
-                method="get"
+                action="link"
+                enctype="application/json"
+                method="post"
             >
                 <input type="text" placeholder="Short form" name="short" />
                 <input type="text" placeholder="Target URL" name="target" />
@@ -19,7 +19,7 @@
             <legend>Delete a short</legend>
 
             <form
-                action="delete-link"
+                action="link-delete"
                 enctype="application/x-www-form-urlencoded"
                 method="get"
             >

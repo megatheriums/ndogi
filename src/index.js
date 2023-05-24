@@ -12,14 +12,17 @@ const app = express();
 app.use(express.urlencoded({
   extended: false,
 }));
+app.use(express.json({
+  extended: false,
+}));
 
 app.use('/', express.static(path.join(__dirname, '..', 'data', 'public')));
 
-app.all('/create-link', async (req, res) => {
+app.post('/link', async (req, res) => {
   const {
     short,
     target,
-  } = req.query;
+  } = req.body;
 
   if (!short || !target) {
     res.status(400).send('Invalid parameter values for "short" and/or "target".');
@@ -38,7 +41,7 @@ app.all('/create-link', async (req, res) => {
   res.send(`Created short: <a href="/${short}" target="_blank">/${short}</a>`);
 });
 
-app.get('/delete-link', async (req, res) => {
+const deleteShort = async (req, res) => {
   const {
     short,
   } = req.query;
@@ -51,7 +54,9 @@ app.get('/delete-link', async (req, res) => {
     short,
   ]);
   res.send(`Successfully deleted link for "${short}".`);
-});
+};
+app.delete('/link', deleteShort);
+app.get('/link-delete', deleteShort);
 
 app.get('/*', async (req, res) => {
   const requestPath = req.path.replace(/^\//, '');
@@ -65,9 +70,7 @@ app.get('/*', async (req, res) => {
       target = `https://${target}`;
     }
     console.log(`Redirecting to: ${target}`);
-    res.setHeader('Location', target);
-    res.status(301).send();
-    return;
+    res.redirect(301, target);
   }
   console.debug(`Couldn't find link for "${requestPath}"`);
   res.status(404).send();
