@@ -95,11 +95,14 @@ jobs:
         with:
           terragrunt_version: latest
           token: ${{secrets.GITHUB_TOKEN}}
-      - id: terraform_apply
+      - name: Deploy infrastructure
         run: npm run apply
-      - run: echo NDOGI_URL=$(terraform-bin output url) >> $GITHUB_ENV
-      - run: echo "url=$NDOGI_URL"
-      - run: npm run test:node:e2e
+      - name: Read endpoint URL
+        run: cd infrastructure && echo NDOGI_URL=$(terragrunt output url) >> $GITHUB_ENV
+      - name: Install Node.JS dependencies
+        run: npm run setup
+      - name: Run End-to-End tests
+        run: npm run test:node:e2e
   Undeploy:
     runs-on: ubuntu-latest
     needs: Deploy
