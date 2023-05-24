@@ -59,11 +59,21 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_service" "main" {
+  depends_on = [
+    null_resource.image
+  ]
+
   name            = "main"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = 2
   launch_type     = "FARGATE"
+
+  triggers = {
+    docker_image_trigger = local.docker_image_trigger
+  }
+
+  force_new_deployment = true
 
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
