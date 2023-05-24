@@ -98,7 +98,7 @@ jobs:
       - name: Deploy infrastructure
         run: npm run apply
       - name: Read endpoint URL
-        run: cd infrastructure && echo NDOGI_URL=$(terragrunt output url) >> $GITHUB_ENV
+        run: cd infrastructure && echo NDOGI_URL=$(terragrunt output -raw url) >> $GITHUB_ENV
       - name: Install Node.JS dependencies
         run: npm run setup
       - name: Run End-to-End tests
