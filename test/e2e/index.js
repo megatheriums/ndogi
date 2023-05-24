@@ -6,7 +6,7 @@ import {
 import fetch from 'node-fetch';
 
 const config = {
-  url: 'http://localhost:3000',
+  url: process.env.NDOGI_URL || 'http://localhost:3000',
 };
 
 describe('Main page', () => {
