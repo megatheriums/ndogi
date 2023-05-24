@@ -2,18 +2,16 @@
 
 URL shortener for mid-sized SaaS company.
 
-- AWS, Terraform, Node.JS
-- GitHub Actions QA
-- RDS, ECS, Fargate
-- Cost-efficient
-- Scalable (High traffic and Traffic peaks)
-- Maintainable
-- Stable
-- Release model
+Tech-Stack:
 
-**Limitations:**
-
-- Links cannot be updated once stored due to cache
+- Application: Node.JS
+- Infrastructure
+  - Terraform
+  - AWS
+    - ECS, Fargate
+    - RDS
+    - VPC, Load Balancers
+- DevOps: GitHub Actions
 
 ## Overview
 
@@ -35,6 +33,7 @@ URL shortener for mid-sized SaaS company.
   - [Business perspective](#business-perspective)
     - [Costs](#costs)
     - [Income](#income)
+- [Contribution](#contribution)
 
 ## Getting started
 
@@ -208,3 +207,34 @@ At the moment, the application has limited scalability.
 - Reserved namespaces
   - Charge for usage of reserved namespaces (e.g. "/Eat...", "/Buy..." for advertisers)
   - Allow companies/individuals to rent namespaces (e.g. "/LH..." to allow Lufthansa to create quick-info screens to flights like "/LH591")
+
+## Contribution
+
+This repository loosely follows the [Git Flow branch-model](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) with a master, develop, and any amount of feature-branches.
+
+To submit your code, create a feature branch and, once the Quality Assurance tests pass, a Pull Request to `develop`.
+
+### Development
+
+The repository includes a [list of recommended VSCode-extensions](https://github.com/megatheriums/ndogi/blob/develop/.vscode/extensions.json) to make your life easier.
+
+All CI/CD scripts can be run locally using `npm run [script-name]`:
+
+| Script | Purpose | Description |
+| --- | --- | --- |
+| `apply` | Deployment | Deploys the infrastructure. |
+| `destroy` | Deployment | Destroys the infrastructure. |
+| `fix` | Debugging | Runs all fixes |
+| `fix:node:audit` | Debugging | Updates dependencies to fix the audit. |
+| `fix:node:lint` | Debugging | Fixes linting errors in the application code. |
+| `fix:terraform:lint` | Debugging | Fixes linting errors in the infrastructure code. |
+| `plan` | Deployment | Creates a deployment plan for the infrastructure. |
+| `publish` | Deployment | Builds and uploads a new docker image. |
+| `setup` | Setup | Installs all dependencies. |
+| `setup:production` | Setup | Installs the production dependencies (excludes development- and testing- tools). |
+| `start` | Running | Starts the server locally. |
+| `test` | Testing | Runs all tests |
+| `test:node:audit` | Testing | Audits the Node.JS dependencies for security vulnerabilities; see [npm audit](https://docs.npmjs.com/auditing-package-dependencies-for-security-vulnerabilities) |
+| `test:node:e2e` | Testing | Runs End-to-End tests. Requires an environment to be started and [configured](#configuration). |
+| `test:node:lint` | Testing | Checks the linting of Node.JS code |
+| `test:terraform:lint` | Testing | Checks the linting of the Infrastructure code |
