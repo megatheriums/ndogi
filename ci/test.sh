@@ -10,7 +10,7 @@ echo "Running $objective tests..."
 # Terraform formatting
 if [ "$objective" = "all" ] || [ "$objective" = "terraform-lint" ]; then
 	cd infrastructure
-	env $(cat .env | xargs) terragrunt fmt -check
+	env $(cat ../.env | xargs) terragrunt fmt -check
     exit_code=$?
     if [ exit_code != 0 ]; then
         echo "Failed terraform linting"

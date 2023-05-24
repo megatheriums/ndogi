@@ -8,7 +8,7 @@ fi
 # Terraform formatting
 if [ "$objective" = "all" ] || [ "$objective" = "terraform-lint" ]; then
 	cd infrastructure
-	env $(cat .env | xargs) terragrunt fmt
+	env $(cat ../.env | xargs) terragrunt fmt
 	cd ..
 fi
 

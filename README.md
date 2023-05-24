@@ -15,6 +15,27 @@ URL shortener for mid-sized SaaS company.
 
 - Links cannot be updated once stored due to cache
 
+## Overview
+
+- [Getting started](#getting-started)
+  - [Requirements](#requirements)
+  - [Deploying and destroying](#deploying-and-destroying)
+- [API](#api)
+  - [POST /link](#post-link)
+  - [DELETE /link](#delete-link)
+- [Configuration](#configuration)
+- [Optimizations](#optimizations)
+  - [Engineering perspective](#engineering-perspective)
+    - [Usability](#usability)
+    - [Stability](#stability)
+    - [Quality Assurance](#quality-assurance)
+    - [Security](#security)
+    - [Observability](#observability)
+    - [Scalability](#scalability)
+  - [Business perspective](#business-perspective)
+    - [Costs](#costs)
+    - [Income](#income)
+
 ## Getting started
 
 ### Requirements
@@ -31,7 +52,7 @@ To install all dependencies, run:
 npm run setup
 ```
 
-Afterwards, create a [infrastructure/.env](infrastructure/.env) file as explained in [configuration](#configuration).
+Afterwards, create a [.env](.env) file and [configure it](#configuration).
 
 To deploy a new environment, run:
 
@@ -45,76 +66,124 @@ To destroy your environment, run:
 npm run destroy
 ```
 
+## API
+
+### POST /link
+
+Creates a new shortened link.
+
+Parameters:
+
+- `short: String` The short form of the link, e.g. `"gh"`
+- `target: String` The target URL, e.g. `"https://github.com"`
+
+### DELETE /link
+
+Deletes a link.
+
+Parameters:
+
+- `short: String` The short form of the link to delete, e.g. `"gh"`
+
 ## Configuration
 
 | Name | Type | Description |
 | --- | --- | --- |
-| AWS_ACCESS_KEY_ID | String | The Access Key for the AWS account. |
-| AWS_SECRET_ACCESS_KEY | String | The secret access key for the AWS account. |
+| **AWS_ACCESS_KEY_ID** | String | Required; the Access Key for the AWS account. |
+| **AWS_SECRET_ACCESS_KEY** | String | Required; the secret access key for the AWS account. |
+| **TF_VAR_environment** | String | Required; the name of the environment that will be deployed. Must be unique to prevent impacting other environments or developers. For local development, choose `local-myname`. |
+| DATABASE_HOST | String | _Local only;_ Host of the MySQL database, e.g. `"localhost"` |
+| DATABASE_NAME | String | _Local only;_ Name of the MySQL database, e.g. `"ndogi"` |
+| DATABASE_PASSWORD | String | _Local only;_ Password to access the MySQL database, e.g. `"12345678"` |
+| DATABASE_PORT | Integer | _Local only;_ Port of the MySQL database, e.g. `3306` |
+| DATABASE_USERNAME | String | _Local only;_ Username to access the MySQL database, e.g. `"root"` |
 | TF_VAR_aws_account_id | Integer | The ID of the AWS account to deploy to. |
-| TF_VAR_environment | String | The name of the environment that will be deployed. Must be unique to prevent impacting other environments or developers. For local development, choose `local-myname`. |
+| TF_VAR_database_host | String | Host of the MySQL database, e.g. `"localhost"` |
+| TF_VAR_database_name | String | Name of the MySQL database, e.g. `"ndogi"` |
+| TF_VAR_database_password | String | Password to access the MySQL database, e.g. `"12345678"` |
+| TF_VAR_database_port | Integer | Port of the MySQL database, e.g. `3306` |
+| TF_VAR_database_username | String | Username to access the MySQL database, e.g. `"root"` |
 | TF_VAR_enable_debugging | Boolean | Whether to enable debugging in the deployed resources or not. |
-
 
 ## Optimizations
 
 ### Engineering perspective
 
+#### Usability
+
+- Application
+  - UI. Obviously.
+  - API Client: Create an API client library in common programming languages for easy integration by customers
+- Infrastructure
+  - Domain: Use a common domain that remains across multiple (un-)deployments within the same environment with [Route 53](https://aws.amazon.com/route53/) and [API Gateway](https://aws.amazon.com/api-gateway/).
+
 #### Stability
 
-- Deploy updates in separate environment with monitoring, redirect increasing amount of traffic to the new version (start low, end with 100 %)
-  - Reuse VPC across feature-environments
-- Separate production-, staging- and feature- environment by using different AWS accounts
-- Deploy to multiple [Availability Zones](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones)
-- RDS Replica in different Availability Zones
-- Application:
+- Application
   - Possible race condition for database setup when launching multiple ECS with a database update in parallel
+  - Version API
+- Infrastructure
+  - Deploy updates in separate environment with monitoring, redirect increasing amount of traffic to the new version (start low, end with 100 %)
+  - Reuse VPC across feature-environments
+  - Separate production-, staging- and feature- environment by using different AWS accounts
+  - Deploy to multiple [Availability Zones](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones)
+  - RDS Replica in different Availability Zones
 
 #### Quality Assurance
 
+- Application
+  - Unit tests
+  - Integration tests
+  - End-to-End tests
+    - Better coverage
+    - Instead of sleeping for 120s, check if API is online in the desired version before starting
+  - Test coverage reports, analysis and requirements
 - Dependencies (e.g. NPM, Docker, scripts, Terraform providers, )
   - Fix dependency versions
-  - Check for deprecations
-  - Check for vulnerabilities
+  - Check for deprecations (currently only NPM)
+  - Check for vulnerabilities (currently only NPM)
   - Test for unused dependencies
 - Infrastructure
   - Terraform: Write plan to a file to assure that exact plan will be applied
-  - Assure AWS resource identifiers don't exceed length limits
-    - This is a potential issue since resource names are often generated; with a long environment name - which can happen by auto-generating feature-environment names from branch names - these can get longer than supported by AWS.
-    - Another way of mitigating the risk of duplicate resource names of future-environments is to remove other parts of the resource identifiers; for example, if the AWS account is used only by related projects, the "namespace"-prefix could be removed
   - Docker
     - Image versioning
+  - Load tests
 - CI/CD
   - Rewrite scripts in Python/Node.JS/TypeScript to make them less environment-dependent for local development and support better Quality Assurance within the CI/CD scripts
   - Validate script parameters
+  - Test in different environments to assure Windows/Mac users can deploy, develop and test locally
 
 #### Security
 
-- Create robot-users with least-privilege, encapsulated in each environment
-- VPC: Assure database can only be accessed by ECS in same environment
-- RDS: Encrypt database and use KMS authentication
-- Terraform: Don't print sensitive output values
 - Application
   - Use separate database connection for [multiple-statement queries during setup](https://github.com/mysqljs/mysql#multiple-statement-queries).
   - Authenticate users before deleting links.
-
-#### Automation
-
-- Automatically create backend bucket and credentials separate project
-- Store database version and execute all scripts in `data/sql` to update any database changes
+- Infrastructure
+  - Create robot-users with least-privilege, encapsulated in each environment
+  - VPC: Assure database can only be accessed by ECS in same environment
+  - RDS: Encrypt database and use KMS authentication
 
 #### Observability
 
 - Application
   - Use a proper logging module instead of `console`
 - Infrastructure
-  - Tags: Utilize tags to make it easier to track usage in different environments or application parts
+  - Connect to CloudWatch, Datadog, ELK, or Grafana
+  - Create Dashboard with important cost-metrics
+  - Create cost-alerts
   - RDS
     - Enable logging and monitoring
 
+#### Scalability
+
+At the moment, the application has limited scalability.
+
+- RDS: Scales up to 1 TB of storage
+- ECS: Needs [Autoscaling configuration](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html) and a test-case to verify the scaling works as intended
+
 ### Business perspective
 
-#### Optimizing costs
+#### Costs
 
 - Application
   - Optimize memory cache to reduce CPU and RDS load - e.g. depending on the amount of commonly requested links - or remove it to reduce memory size
@@ -127,12 +196,14 @@ npm run destroy
 - ECS
   - Use [Compute Savings Plans](https://aws.amazon.com/savingsplans/compute-pricing/) to reduce costs outside of peak hours
     - Consider paying upfront (depending on capital costs)
+  - Investigate if using [Lambdas](https://aws.amazon.com/lambda/) in a hybrid setup for peak hours can reduce costs
+  - Utilize [S3](https://aws.amazon.com/s3/) to serve static content instead of express
 - RDS
   - Use [Reserved Instances](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html)
 - Development and Maintenance
   - Outsource some tasks to countries with lower wages
 
-#### Optimizing income
+#### Income
 
 - Reserved namespaces
   - Charge for usage of reserved namespaces (e.g. "/Eat...", "/Buy..." for advertisers)
