@@ -1,6 +1,6 @@
 const config = {
   testMatch: [
-    '**/src/test/e2e/**/*.js',
+    '**/test/e2e/**/*.js',
   ],
   transform: {},
   verbose: true,
