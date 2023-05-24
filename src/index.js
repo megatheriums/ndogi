@@ -12,7 +12,7 @@ app.use(express.urlencoded({
 
 app.use('/', express.static(path.join(__dirname, '..', 'data', 'public')));
 
-app.get('/create-link', async (req, res) => {
+app.all('/create-link', async (req, res) => {
   const {
     short,
     target,
@@ -32,7 +32,7 @@ app.get('/create-link', async (req, res) => {
     short,
     target,
   ]);
-  res.send();
+  res.send(`Created short: <a href="/${short}" target="_blank">/${short}</a>`);
 });
 
 app.get('/delete-link', async (req, res) => {
@@ -47,16 +47,22 @@ app.get('/delete-link', async (req, res) => {
   await query('DELETE FROM links WHERE short = ? LIMIT 1', [
     short,
   ]);
-  res.send();
+  res.send(`Successfully deleted link for "${short}".`);
 });
 
 app.get('/*', async (req, res) => {
   const requestPath = req.path.replace(/^\//, '');
   const results = await query('SELECT target FROM links WHERE short = ? LIMIT 1', [requestPath]);
-  console.log(results);
   if (results.length === 1) {
-    console.log(`Redirecting to: ${results[0].target}`);
-    res.setHeader('Location', results[0].target);
+    let {
+      target,
+    } = results[0];
+
+    if (target.substr(0, 4) !== 'http') {
+      target = `https://${target}`;
+    }
+    console.log(`Redirecting to: ${target}`);
+    res.setHeader('Location', target);
     res.status(301).send();
     return;
   }
