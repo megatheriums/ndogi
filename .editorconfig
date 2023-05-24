@@ -11,5 +11,5 @@ trim_trailing_whitespace = true
 [*.json]
 insert_final_newline = false
 
-[*.{hcl,tf,yaml,yml,md}]
+[*.{hcl,js,tf,yaml,yml,md}]
 indent_size = 2

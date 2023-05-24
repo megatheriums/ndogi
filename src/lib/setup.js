@@ -1,8 +1,12 @@
-const fs = require('fs/promises');
-const fsSync = require('fs');
-const path = require('path');
+import fs from 'fs/promises';
+import fsSync from 'fs';
+import path from 'path';
+import url from 'url';
 
-const query = require('./query');
+import query from './query.js';
+
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const setup = async () => {
   let currentVersion = -1;
@@ -45,4 +49,4 @@ const setup = async () => {
   ]);
 };
 
-module.exports = setup;
+export default setup;

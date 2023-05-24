@@ -38,3 +38,13 @@ if [ "$objective" = "all" ] || [ "$objective" = "node-lint" ]; then
         exit $exit_code
     fi
 fi
+
+# Node.JS E2E
+if [ "$objective" = "all" ] || [ "$objective" = "node-e2e" ]; then
+    NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest
+    exit_code=$?
+    if [ $exit_code != 0 ]; then
+        echo "Failed E2E tests"
+        exit $exit_code
+    fi
+fi
