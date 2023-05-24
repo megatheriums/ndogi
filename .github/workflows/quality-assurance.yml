@@ -101,6 +101,8 @@ jobs:
         run: cd infrastructure && echo NDOGI_URL=$(terragrunt output -raw url) >> $GITHUB_ENV
       - name: Install Node.JS dependencies
         run: npm run setup
+      - name: Wait 30 seconds for deployment to complete
+        run: sleep 30
       - name: Run End-to-End tests
         run: npm run test:node:e2e
   Undeploy:
