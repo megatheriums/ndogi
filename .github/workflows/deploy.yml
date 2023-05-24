@@ -48,6 +48,7 @@ jobs:
           terragrunt_version: latest
           token: ${{secrets.GITHUB_TOKEN}}
       - run: npm run apply
-      - run: echo $(terragrunt output url)
-      - run: echo NDOGI_URL=$(terragrunt output url) >> $GITHUB_ENV
+      - run: echo $GITHUB_ENV
+      - run: cd infrastructure && echo $(terragrunt output url)
+      - run: cd infrastructure && echo NDOGI_URL=$(terragrunt output url) >> $GITHUB_ENV
       - run: npm run test:node:e2e
