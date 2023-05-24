@@ -40,12 +40,14 @@ jobs:
         uses: actions/checkout@v3
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
       - name: Install Terragrunt
         uses: autero1/action-terragrunt@v1.3.2
         with:
           terragrunt_version: latest
           token: ${{secrets.GITHUB_TOKEN}}
       - run: npm run apply
-      - run: echo NDOGI_URL=$(terraform-bin output url) >> $GITHUB_ENV
-      - run: echo "url=$NDOGI_URL"
+      - run: echo $(terraform output url)
+      - run: echo NDOGI_URL=$(terraform output url) >> $GITHUB_ENV
       - run: npm run test:node:e2e
