@@ -13,6 +13,8 @@ const config = {
   url: `http://${process.env.NDOGI_URL || 'localhost:3000'}`,
 };
 
+console.log(config);
+
 const short = `--random-test-link-${uuid()}`;
 const target = 'https://github.com/megatheriums/ndogi';
 
